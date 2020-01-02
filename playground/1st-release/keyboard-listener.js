@@ -1,4 +1,4 @@
-function createKeyboardListener(){
+export default function createKeyboardListener(document){
 
     //observer pattern
     const state = {
