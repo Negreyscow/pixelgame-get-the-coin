@@ -13,6 +13,7 @@
                 height: 400px;
             }
         </style>
+        <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
         <canvas id="screen" width="10" height="10"></canvas>
@@ -29,8 +30,17 @@
             const screen = document.getElementById('screen')
             renderScreen(screen, game, requestAnimationFrame)
 
-            game.addPlayer({ playerId: 'player1', playerX: 1, playerY: 1  })
-            game.addCoin({ coinId: 'coin1', coinX: 5, coinY: 5  })
+            const socket = io()
+
+            socket.on('connect', () => {
+                const playerId = socket.id
+                console.log(`Player connected with the client with id: ${playerId}`)
+            })
+
+            socket.on('setup', (state) => {
+                game.state = state
+            })
+
         </script>
     </body>
 </html>
