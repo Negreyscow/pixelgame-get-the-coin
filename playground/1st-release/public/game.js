@@ -9,20 +9,50 @@ export default function createGame(){
         }
     }
 
+    const observers = []
+
+    function subscribe(observerFunction){ //registrar observer dentro de um subject
+        observers.push(observerFunction)
+    }
+
+    function notifyAll(command){
+        console.log(`Notifying ${state.observers.length} observers`)
+        for (const observerFunction of state.observers){
+            observerFunction(command)
+        }
+    }
+
+    function setState(newState){
+        Object.assign(state, newState)
+    }
+
     function addPlayer(command){
         const playerId = command.playerId
-        const playerX = command.playerX
-        const playerY = command.playerY
+        const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random() * state.screen.width)
+        const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random() * state.screen.height)
 
         state.players[playerId] = {
             x: playerX,
             y: playerY
         }
+
+        notifyAll({
+            type: 'add-player',
+            playerId: playerId,
+            playerX: playerX,
+            playerY: playerY
+        })
+
     }
 
     function removePlayer(command){
         const playerId = command.playerId
         delete state.players[playerId]
+
+        notifyAll({
+            type: 'remove-player',
+            playerId: playerId
+        })
     }
 
     function addCoin(command){
@@ -43,7 +73,7 @@ export default function createGame(){
 
     //factory pattern
     function movePlayer(command){
-        console.log(`Moving ${command.playerId} with ${command.keyPressed}`)
+        notifyAll(command)
 
         const acceptedMoves = {
             ArrowUp(player){
@@ -90,6 +120,7 @@ export default function createGame(){
                 removeCoin({ coinId: coinId })
         }
     }
+    
 
     return {
         addPlayer,
@@ -97,6 +128,8 @@ export default function createGame(){
         addCoin,
         removeCoin,
         movePlayer,
-        state
+        setState,
+        state,
+        subscribe
     }
 }
