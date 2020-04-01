@@ -7,12 +7,13 @@
             #screen {
                 border: 1px solid gray;
                 image-rendering: pixelated;
-                image-rendering: crisp-edges;
+                image-rendering: crisp-edges; 
                 image-rendering: -moz-crisp-edges;
                 width: 400px;
                 height: 400px;
             }
         </style>
+
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
@@ -25,7 +26,7 @@
 
             const game = createGame()
             const keyboardListener = createKeyboardListener(document)
-            
+             
             const socket = io()
 
             socket.on('connect', () => {
@@ -49,7 +50,7 @@
 
             socket.on('remove-player', (command) => {
                 console.log(`Receiving ${command.type} ->  ${command.playerId} `)
-                game.addPlayer(command)
+                game.removePlayer(command)
             })
 
             socket.on('add-player', (command) => {

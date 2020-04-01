@@ -6,7 +6,7 @@ export default function createGame(){
         screen: {
             height: 10,
             width: 10
-        }
+        },
     }
 
     const observers = []
@@ -16,8 +16,7 @@ export default function createGame(){
     }
 
     function notifyAll(command){
-        console.log(`Notifying ${state.observers.length} observers`)
-        for (const observerFunction of state.observers){
+        for (const observerFunction of observers){
             observerFunction(command)
         }
     }
