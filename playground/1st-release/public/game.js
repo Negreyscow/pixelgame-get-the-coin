@@ -11,6 +11,12 @@ export default function createGame(){
 
     const observers = []
 
+    function start() {
+        const frequency = 2000
+
+        setInterval(addCoin, frequency)
+    }
+
     function subscribe(observerFunction){ //registrar observer dentro de um subject
         observers.push(observerFunction)
     }
@@ -23,6 +29,24 @@ export default function createGame(){
 
     function setState(newState){
         Object.assign(state, newState)
+    }
+
+    function addCoin(command) {
+        const coinId = command ? command.coinId : Math.floor(Math.random() * 100000000)
+        const coinX = command ? command.coinX : Math.floor(Math.random() * state.screen.width)
+        const coinY = command ? command.coinY : Math.floor(Math.random() * state.screen.height)
+
+        state.coins[coinId] = {
+            x: coinX,
+            y: coinY
+        }
+
+        notifyAll({
+            type: 'add-coin',
+            coinId: coinId,
+            coinX: coinX,
+            coinY: coinY
+        })
     }
 
     function addPlayer(command){
@@ -54,20 +78,14 @@ export default function createGame(){
         })
     }
 
-    function addCoin(command){
-        const coinId = command.coinId
-        const coinX = command.coinX
-        const coinY = command.coinY
-
-        state.coins[coinId] = {
-            x: coinX,
-            y: coinY
-        }
-    }
-
     function removeCoin(command){
         const coinId = command.coinId
         delete state.coins[coinId]
+
+        notifyAll({
+            type: 'remove-coin',
+            coinId: coinId
+        })
     }
 
     //factory pattern
@@ -129,6 +147,7 @@ export default function createGame(){
         movePlayer,
         setState,
         state,
-        subscribe
+        subscribe,
+        start
     }
 }

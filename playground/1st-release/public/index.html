@@ -58,6 +58,26 @@
                 game.addPlayer(command)
             })
 
+            socket.on('move-player', (command) => {
+                console.log(`Receiving ${command.type} ->  ${command.playerId} `)
+
+                const playerId = socket.getElementById
+
+                if (playerId !== command.playerId){
+                    game.movePlayer(command)
+                }
+            })
+
+            socket.on('add-coin', (command) => {
+                console.log(`Receiving ${command.type} ->  ${command.coinId} `)
+                game.addCoin(command)
+            })
+
+            socket.on('remove-coin', (command) => {
+                console.log(`Receiving ${command.type} ->  ${command.coinId} `)
+                game.removeCoin(command)
+            })
+
         </script>
     </body>
 </html>

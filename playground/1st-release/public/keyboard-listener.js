@@ -30,6 +30,7 @@ export default function createKeyboardListener(document){
             playerId: state.playerId,
             keyPressed
         } 
+        
         notifyAll(command)
     }
 
